@@ -11,6 +11,12 @@ public class NotificationTemplate implements Serializable {
     private ArrayList<Integer> placeholdersStartingIndexes;
     private ArrayList<Integer> placeholdersEndingIndexes;
 
+    /**
+     *
+     * @param subject of the notification template
+     * @param language of the notification template
+     * @param channel of the notification template
+     */
     public NotificationTemplate(String subject, Language language, Channel channel) {
         this.subject = subject;
         this.language = language;
@@ -19,6 +25,11 @@ public class NotificationTemplate implements Serializable {
         placeholdersEndingIndexes = new ArrayList<>();
     }
 
+    /**
+     *
+     * @param content
+     * @return a function to add the place holder in the content string to the both arrays.
+     */
     public boolean editContent(String content) {
         this.content = content;
         placeholdersStartingIndexes.clear();
@@ -68,26 +79,50 @@ public class NotificationTemplate implements Serializable {
         return subject != null ? subject.equalsIgnoreCase(template.subject) : template.subject == null;
     }
 
+    /**
+     * getter for the subject
+     * @return the subject
+     */
     public String getSubject() {
         return subject;
     }
 
+    /**
+     * getter for the content
+     * @return the content
+     */
     public String getContent() {
         return content;
     }
 
+    /**
+     * getter for the language
+     * @return the language
+     */
     public Language getLanguage() {
         return language;
     }
 
+    /**
+     * getter for the channel
+     * @return the channel
+     */
     public Channel getChannel() {
         return channel;
     }
 
+    /**
+     * getter for the placeholderstartingIndexes
+     * @return
+     */
     public ArrayList<Integer> getPlaceholdersStartingIndexes() {
         return placeholdersStartingIndexes;
     }
 
+    /**
+     * getter for the placeHoldersEndingIndexes
+     * @return
+     */
     public ArrayList<Integer> getPlaceholdersEndingIndexes() {
         return placeholdersEndingIndexes;
     }

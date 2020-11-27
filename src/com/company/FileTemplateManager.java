@@ -8,6 +8,11 @@ public class FileTemplateManager implements TemplateManager{
     ArrayList<NotificationTemplate> templates = new ArrayList<>();
     String filename;
 
+    /**
+     *
+     * @param filename
+     * A constructor to deserialize the object inside the file
+     */
     public FileTemplateManager(String filename) {
         this.filename = filename;
         File file = new File(filename);
@@ -22,6 +27,11 @@ public class FileTemplateManager implements TemplateManager{
         }
     }
 
+    /**
+     *
+     * @param template
+     * @return the template is already in there or not
+     */
     public boolean addTemplate(NotificationTemplate template) {
         if (templates.contains(template)) {
             return false;
@@ -31,6 +41,11 @@ public class FileTemplateManager implements TemplateManager{
         return true;
     }
 
+    /**
+     *
+     * @param subject
+     * @return whether the template is deleted or not
+     */
     public boolean deleteTemplate(String subject) {
         NotificationTemplate template = null;
         for (int i = 0; i < templates.size(); i++) {
@@ -43,6 +58,12 @@ public class FileTemplateManager implements TemplateManager{
         return false;
     }
 
+    /**
+     *
+     * @param subject
+     * @param updatedTemplate
+     * @return whether the template is updated or not
+     */
     public boolean updateTemplate(String subject, NotificationTemplate updatedTemplate) {
         NotificationTemplate template = null;
         for (int i = 0; i < templates.size(); i++) {
@@ -55,6 +76,11 @@ public class FileTemplateManager implements TemplateManager{
         return false;
     }
 
+    /**
+     *
+     * @param subject
+     * @return whether it could find the template we want to return or not
+     */
     public NotificationTemplate getTemplate(String subject) {
         NotificationTemplate template = null;
         for (int i = 0; i < templates.size(); i++) {
@@ -65,10 +91,17 @@ public class FileTemplateManager implements TemplateManager{
         return null;
     }
 
+    /**
+     *
+     * @return the list of templates
+     */
     public ArrayList<NotificationTemplate> getAllTemplates() {
         return templates;
     }
 
+    /**
+     * a function to serialize the object in the file
+     */
     private void updateFile() {
         FileOutputStream file = null;
         try {

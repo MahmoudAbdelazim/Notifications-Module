@@ -9,6 +9,7 @@ public class Main {
         TemplateManager templateManager = new FileTemplateManager("database.txt");
 
         while (true) {
+            //main menu to test our module
             System.out.println("\n1- Show All Templates" +
                     "\n2- Add Template" +
                     "\n3- Remove Template" +
@@ -16,7 +17,7 @@ public class Main {
                     "\n5- Update Template" +
                     "\n6- Exit");
             Scanner in = new Scanner(System.in);
-            option = in.nextInt();
+            option = in.nextInt();  // waiting the user for input
             in.skip("\n");
 
             if (option == 1) {
@@ -31,7 +32,7 @@ public class Main {
                 System.out.println("Language: " +
                         "\n1- English" +
                         "\nany other number - Arabic");
-                int lang = in.nextInt();
+                int lang = in.nextInt();    // pick the desired language
                 System.out.println("Channel: 1- Email" +
                         "\nany other number - SMS");
                 int chan = in.nextInt();
