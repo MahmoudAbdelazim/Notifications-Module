@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Template</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<form method="POST" th:object="${id}" th:action="@{/template/search}">
+    <label>Template ID: <input type="text" name="id"></label>
+    <input type="submit" value="Search">
+</form>
+<span class="message" th:text="${message}"></span>
+</body>
+</html>

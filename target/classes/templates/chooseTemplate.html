@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose Template</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<form method="POST" th:object="${templateSubject}" th:action="@{/notification/message}">
+    <label>Template Subject: <input name="templateSubject" type="text"></label>
+    <input type="submit" value="Submit">
+</form>
+<span class="message" th:text="${message}"></span>
+</body>
+</html>

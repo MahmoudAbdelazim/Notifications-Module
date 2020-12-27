@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Templates</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<table>
+    <tr>
+        <th>Subject</th>
+        <th>Content</th>
+        <th>Language</th>
+        <th>Channel</th>
+    </tr>
+    <tr th:each="template: ${templates}">
+        <td th:text="${template.subject}"></td>
+        <td th:text="${template.content}"></td>
+        <td th:text="${template.language}"></td>
+        <td th:text="${template.channel}"></td>
+    </tr>
+</table>
+</body>
+</html>

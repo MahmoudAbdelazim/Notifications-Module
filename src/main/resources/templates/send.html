@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send Notification</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<table>
+    <tr>
+        <th>Subject</th>
+        <th>Content</th>
+        <th>Language</th>
+        <th>Channel</th>
+    </tr>
+    <tr>
+        <td th:text="${template.subject}"></td>
+        <td th:text="${template.content}"></td>
+        <td th:text="${template.language}"></td>
+        <td th:text="${template.channel}"></td>
+    </tr>
+</table>
+<h3>Enter Placeholders (delimited by '/'): </h3>
+<form method="POST" th:action="@{/notification/send}">
+    <label>
+        <input hidden name="subject" th:value="${template.subject}" type="text">
+        <input name="placeholders" type="text" th:object="${placeholders}" th:value="${placeholders}">
+    </label>
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>

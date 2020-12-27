@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Template</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<form method="POST" th:object="${template}">
+    <div class="input">
+        <label>Subject: <input type="text" name="subject"></label>
+    </div>
+    <div class="input">
+        <label>Content: <textarea name="content" rows="10" cols="50" maxlength="255"></textarea> </label>
+    </div>
+    <div class="input">
+        <label>Langauge: <select name="language">
+            <option th:each="language: ${languages}" th:text="${language}" th:value="${language}"></option>
+        </select></label>
+    </div>
+    <div class="input">
+        <label>Channel: <select name="channel">
+            <option th:each="channel: ${channels}" th:value="${channel}" th:text="${channel}"></option>
+        </select></label>
+    </div>
+    <div class="input">
+        <input type="submit" value="Add Template">
+    </div>
+</form>
+<span class="message" th:text="${message}">Error</span>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Template</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<form method="POST" th:action="@{/template/update}" th:object="${template}">
+    <label>Subject: <input name="subject" readonly th:value="${template.subject}" type="text"></label>
+    <label>Content: <textarea name="content" th:text="${template.content}" th:value="${template.content}"></textarea>
+    </label>
+    <label>Langauge:
+        <select id="language" name="language">
+            <option th:each="language: ${languages}" th:selected="${language.equals(template.language.toString())}" th:text="${language}"
+                    th:value="${language}"></option>
+        </select>
+    </label>
+    <label>Channel:
+        <select id="channel" name="channel">
+            <option th:each="channel: ${channels}" th:selected="${channel.equals(template.channel.toString())}" th:text="${channel}"
+                    th:value="${channel}"></option>
+        </select>
+    </label>
+    <input type="submit" value="Update Template">
+</form>
+<form method="POST" th:action="@{/template/delete}" th:object="${template}">
+    <input hidden name="subject" th:value="${template.subject}" type="text">
+    <input type="submit" value="Delete Template">
+</form>
+<span class="message" th:text="${message}">Error</span>
+</body>
+</html>
