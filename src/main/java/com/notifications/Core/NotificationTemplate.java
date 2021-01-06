@@ -1,5 +1,6 @@
 package com.notifications.Core;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -53,6 +54,11 @@ public class NotificationTemplate implements Serializable, Cloneable {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
 

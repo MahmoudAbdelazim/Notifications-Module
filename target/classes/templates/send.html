@@ -22,13 +22,21 @@
         <td th:text="${template.channel}"></td>
     </tr>
 </table>
-<h3>Enter Placeholders (delimited by '/'): </h3>
 <form method="POST" th:action="@{/notification/send}">
-    <label>
-        <input hidden name="subject" th:value="${template.subject}" type="text">
-        <input name="placeholders" type="text" th:object="${placeholders}" th:value="${placeholders}">
-    </label>
-    <input type="submit" value="Submit">
+    <input hidden name="subject" th:value="${template.subject}" type="text">
+    <div class="input">
+        <label>Enter Placeholders (delimited by '/'):
+            <input name="placeholders" type="text" th:object="${placeholders}" th:value="${placeholders}">
+        </label>
+    </div>
+    <div class="input">
+        <label>Enter Destination:
+            <input name="destination" type="text" th:object="${destination}" th:value="${destination}">
+        </label>
+    </div>
+    <div class="input">
+        <input type="submit" value="Send">
+    </div>
 </form>
 </body>
 </html>

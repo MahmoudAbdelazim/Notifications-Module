@@ -28,7 +28,7 @@ public class NotificationQueueingController {
         this.queue = queue;
         this.templateRepo = templateRepo;
     }
-
+    
     @GetMapping("/chooseTemplate")
     public String viewChooseTemplate(Model model) {
         model.addAttribute("templateSubject", "");
