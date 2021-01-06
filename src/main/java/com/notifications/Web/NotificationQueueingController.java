@@ -1,5 +1,6 @@
 package com.notifications.Web;
 
+import com.notifications.Core.Channel;
 import com.notifications.Core.Notification;
 import com.notifications.Core.NotificationTemplate;
 import com.notifications.Infrastructure.NotificationQueueRepository;
@@ -42,6 +43,12 @@ public class NotificationQueueingController {
             NotificationTemplate temp = template.get();
             model.addAttribute("template", temp);
             model.addAttribute("placeholders", "");
+            if (temp.getChannel() == Channel.Email) {
+                model.addAttribute("type", "email");
+            } else {
+                model.addAttribute("type", "sms");
+            }
+            model.addAttribute("destination", "");
             return "send";
         } else {
             model.addAttribute("message", "Template Not Found");
@@ -50,21 +57,48 @@ public class NotificationQueueingController {
     }
 
     @PostMapping("/send")
-    public String sendNotification(NotificationTemplate template, String placeholders, Model model) {
+    public String sendNotification(NotificationTemplate template, String placeholders, String destination, Model model) {
         Optional<NotificationTemplate> notificationTemplate = templateRepo.findById(template.getSubject());
         template = notificationTemplate.get();
         Notification notification = new Notification();
         notification.setLanguage(template.getLanguage());
         notification.setChannel(template.getChannel());
         notification.setSubject(template.getSubject());
-        if (notification.fillTemplate(template, placeholders)) {
-            System.out.println(notification);
+        notification.setDestination(destination);
+
+        boolean valid = true;
+        if (template.getChannel() == Channel.SMS) {
+            for (int i = 0; i < destination.length(); i++) {
+                if (destination.charAt(i) < '0' || destination.charAt(i) > '9') {
+                    valid = false;
+                    model.addAttribute("message", "Invalid Phone Number (must use digits only)");
+                    break;
+                }
+            }
+        } else if (template.getChannel() == Channel.Email) {
+            if (!checkEmail(destination)) {
+                valid = false;
+                model.addAttribute("message", "Invalid Email!");
+            }
+        }
+        if (!notification.fillTemplate(template, placeholders)) {
+            valid = false;
+            model.addAttribute("message", "Placeholders don't match");
+
+        }
+        if (valid) {
             queue.save(notification);
             model.addAttribute("message", "Notification Sent Successfully");
-            return "chooseTemplate";
-        } else {
-            model.addAttribute("message", "Placeholders don't match");
-            return "chooseTemplate";
         }
+        return "chooseTemplate";
+    }
+
+    private boolean checkEmail(String email) {
+        return email.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"" +
+                "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])" +
+                "*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9]" +
+                "(?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.)" +
+                "{3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:" +
+                "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
     }
 }

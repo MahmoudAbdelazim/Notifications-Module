@@ -1,6 +1,8 @@
 package com.notifications.Core;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Entity;
@@ -27,6 +29,8 @@ public class Notification implements Serializable {
     private Language language;
 
     private Channel channel;
+
+    private String destination;
 
     public boolean fillTemplate(NotificationTemplate template, String placeholdersStr) {
         String[] placeholders = placeholdersStr.split("/");
