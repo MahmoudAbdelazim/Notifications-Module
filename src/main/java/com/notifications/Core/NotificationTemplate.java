@@ -1,6 +1,5 @@
 package com.notifications.Core;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +14,7 @@ import java.util.List;
 @Data
 @RequiredArgsConstructor
 @Entity
-public class NotificationTemplate implements Serializable, Cloneable {
+public class NotificationTemplate implements Serializable {
 
     @Id
     private String subject;
@@ -24,15 +23,13 @@ public class NotificationTemplate implements Serializable, Cloneable {
 
     private Language language;
 
-    private Channel channel;
-
     @ElementCollection
     private List<Integer> placeholdersStartingIndexes = new ArrayList<>();
 
     @ElementCollection
     private List<Integer> placeholdersEndingIndexes = new ArrayList<>();
 
-    public boolean editContent(String content) {
+    public boolean adjustContent(String content) {
         this.content = content;
         placeholdersStartingIndexes.clear();
         placeholdersEndingIndexes.clear();
@@ -54,11 +51,6 @@ public class NotificationTemplate implements Serializable, Cloneable {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 }
 
