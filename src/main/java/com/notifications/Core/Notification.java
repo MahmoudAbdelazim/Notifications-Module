@@ -22,5 +22,7 @@ public class Notification {
 
     private String destination;
 
-    private String placeholders;
+    private String content;
+
+    private String placeholders = "";
 }

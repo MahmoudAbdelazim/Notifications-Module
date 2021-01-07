@@ -9,6 +9,7 @@ import com.notifications.Infrastructure.NotificationTemplateRepository;
 import com.notifications.Infrastructure.SMSQueueRepository;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,12 +34,66 @@ public class NotificationQueueingController {
     }
 
     @PostMapping("/sendEmail")
-    public void sendEmail(@RequestBody EmailNotification notification) {
+    public boolean sendEmail(@RequestBody EmailNotification notification) {
+        if (notification.getSubject() == null
+                && notification.getDestination() == null) return false;
+        Optional<NotificationTemplate> template = templateRepo.findById(notification.getSubject());
+        if (!template.isPresent()) return false;
+        if (!checkEmail(notification.getDestination())) return false;
+        if (!fillTemplate(template.get(), notification)) return false;
         EmailQueue.save(notification);
+        return true;
     }
 
     @PostMapping("/sendSMS")
-    public void sendSMS(@RequestBody SMSNotification notification) {
+    public boolean sendSMS(@RequestBody SMSNotification notification) {
+        if (notification.getSubject() == null
+                && notification.getDestination() == null) return false;
+        Optional<NotificationTemplate> template = templateRepo.findById(notification.getSubject());
+        if (!template.isPresent()) return false;
+        if (!checkPhoneNumber(notification.getDestination())) return false;
+        if (!fillTemplate(template.get(), notification)) return false;
         SMSQueue.save(notification);
+        return true;
+    }
+
+    private boolean checkPhoneNumber(String phoneNumber) {
+        if (phoneNumber.isEmpty()) return false;
+        for (int i = 0; i < phoneNumber.length(); i++) {
+            if (phoneNumber.charAt(i) < '0' || phoneNumber.charAt(i) > '9') return false;
+        }
+        return true;
+    }
+
+    private boolean checkEmail(String email) {
+        return email.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"" +
+                "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])" +
+                "*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9]" +
+                "(?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.)" +
+                "{3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:" +
+                "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
+    }
+
+    private boolean fillTemplate(NotificationTemplate template, Notification notification) {
+        String[] placeholders = notification.getPlaceholders().split("/");
+        if (template.getPlaceholdersStartingIndexes().size() != placeholders.length) return false;
+        StringBuilder contentBuilder = new StringBuilder();
+        int j = 0;
+        for (int i = 0; i < template.getContent().length(); i++) {
+            if (template.getContent().charAt(i) == '{') {
+                contentBuilder.append(placeholders[j]);
+                ++j;
+                for (int k = i + 1; k < template.getContent().length(); k++) {
+                    if (template.getContent().charAt(k) == '}') {
+                        i = k;
+                        break;
+                    }
+                }
+            } else {
+                contentBuilder.append(template.getContent().charAt(i));
+            }
+        }
+        notification.setContent(contentBuilder.toString());
+        return true;
     }
 }
