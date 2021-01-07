@@ -7,6 +7,8 @@ import com.notifications.Core.SMSNotification;
 import com.notifications.Infrastructure.EmailQueueRepository;
 import com.notifications.Infrastructure.NotificationTemplateRepository;
 import com.notifications.Infrastructure.SMSQueueRepository;
+import com.notifications.Vendors.INotificationGateway;
+import com.notifications.Vendors.NotificationGateway;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
@@ -23,6 +25,7 @@ public class NotificationQueueingController {
     EmailQueueRepository EmailQueue;
     SMSQueueRepository SMSQueue;
     NotificationTemplateRepository templateRepo;
+    INotificationGateway notificationGateway = new NotificationGateway();
 
     @Autowired
     public NotificationQueueingController(EmailQueueRepository EmailQueue,
@@ -36,11 +39,17 @@ public class NotificationQueueingController {
     @PostMapping("/sendEmail")
     public boolean sendEmail(@RequestBody EmailNotification notification) {
         if (notification.getSubject() == null
-                && notification.getDestination() == null) return false;
+                && notification.getDestination() == null)
+            return false;
         Optional<NotificationTemplate> template = templateRepo.findById(notification.getSubject());
-        if (!template.isPresent()) return false;
-        if (!checkEmail(notification.getDestination())) return false;
-        if (!fillTemplate(template.get(), notification)) return false;
+        if (!template.isPresent())
+            return false;
+        if (!checkEmail(notification.getDestination()))
+            return false;
+        if (!fillTemplate(template.get(), notification))
+            return false;
+        if (notificationGateway.send(notification))
+            notification.setStatus("success");
         EmailQueue.save(notification);
         return true;
     }
@@ -48,11 +57,17 @@ public class NotificationQueueingController {
     @PostMapping("/sendSMS")
     public boolean sendSMS(@RequestBody SMSNotification notification) {
         if (notification.getSubject() == null
-                && notification.getDestination() == null) return false;
+                && notification.getDestination() == null)
+            return false;
         Optional<NotificationTemplate> template = templateRepo.findById(notification.getSubject());
-        if (!template.isPresent()) return false;
-        if (!checkPhoneNumber(notification.getDestination())) return false;
-        if (!fillTemplate(template.get(), notification)) return false;
+        if (!template.isPresent())
+            return false;
+        if (!checkPhoneNumber(notification.getDestination()))
+            return false;
+        if (!fillTemplate(template.get(), notification))
+            return false;
+        if (notificationGateway.send(notification))
+            notification.setStatus("success");
         SMSQueue.save(notification);
         return true;
     }

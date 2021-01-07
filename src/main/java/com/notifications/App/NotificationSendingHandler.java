@@ -9,14 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Slf4j
-@Component
 public class NotificationSendingHandler {
 
     EmailQueueRepository emailQueue;
     SMSQueueRepository SMSQueue;
 
-    @Autowired
     public NotificationSendingHandler(EmailQueueRepository emailQueue, SMSQueueRepository SMSQueue) {
         this.emailQueue = emailQueue;
         this.SMSQueue = SMSQueue;
@@ -33,24 +30,34 @@ public class NotificationSendingHandler {
     public void sendAllEmails() {
         Iterable<EmailNotification> emails = emailQueue.findAll();
         for (EmailNotification email : emails) {
-            System.out.println("Sending Email:");
-            System.out.println("\tTo: " + email.getDestination() +
-                    "\n\tSubject: " + email.getSubject() +
-                    "\n\tContent: " + email.getContent());
-            System.out.println();
+            if (email.getStatus().equals("success")) {
+                System.out.println("Sending Email:");
+                System.out.println("\tTo: " + email.getDestination() +
+                        "\n\tSubject: " + email.getSubject() +
+                        "\n\tContent: " + email.getContent());
+                System.out.println();
+            }
         }
-        emailQueue.deleteAll();
     }
 
     public void sendAllSMS() {
         Iterable<SMSNotification> SMSs = SMSQueue.findAll();
         for (SMSNotification SMS : SMSs) {
-            System.out.println("Sending SMS:");
-            System.out.println("\tTo: " + SMS.getDestination() +
-                    "\n\tSubject: " + SMS.getSubject() +
-                    "\n\tContent: " + SMS.getContent());
-            System.out.println();
+            if (SMS.getStatus().equals("success")) {
+                System.out.println("Sending SMS:");
+                System.out.println("\tTo: " + SMS.getDestination() +
+                        "\n\tSubject: " + SMS.getSubject() +
+                        "\n\tContent: " + SMS.getContent());
+                System.out.println();
+            }
         }
+    }
+
+    public void clearEmailQueue() {
+        emailQueue.deleteAll();
+    }
+
+    public void clearSMSQueue() {
         SMSQueue.deleteAll();
     }
 }

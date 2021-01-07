@@ -25,4 +25,6 @@ public class Notification {
     private String content;
 
     private String placeholders = "";
+
+    private String status = "fail";
 }
