@@ -8,6 +8,7 @@ public class NotificationGateway implements INotificationGateway{
     @Override
     public boolean send(Notification notification)  {
         Random rd = new Random();
-        return rd.nextBoolean();
+        int num = rd.nextInt() % (9) + 1;
+        return num > 2;
     }
 }

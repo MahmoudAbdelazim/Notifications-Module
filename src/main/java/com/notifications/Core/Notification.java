@@ -20,6 +20,8 @@ public class Notification {
 
     private String subject;
 
+    private String source;
+
     private String destination;
 
     private String content;

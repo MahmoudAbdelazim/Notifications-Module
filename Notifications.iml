@@ -14,16 +14,15 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
-        <datasource-mapping>
-          <factory-entry name="entityManagerFactory" />
-        </datasource-mapping>
+        <datasource-mapping />
         <naming-strategy-map />
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
       <configuration>
-        <fileset id="fileset" name="NotificationDequeueApp" removed="false">
-          <file>file://$MODULE_DIR$/src/main/java/com/notifications/NotificationDequeueApp.java</file>
+        <fileset id="fileset" name="NotificationSendingHandler" removed="false">
+          <file>file://$MODULE_DIR$/src/main/java/com/notifications/App/NotificationSendingHandler.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/com/notifications/NotificaionSender.java</file>
         </fileset>
       </configuration>
     </facet>
@@ -37,7 +36,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-data-jdbc:2.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-jdbc:2.4.1" level="project" />

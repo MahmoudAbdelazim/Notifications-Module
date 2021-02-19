@@ -39,12 +39,12 @@ public class NotificationQueueingController {
     @PostMapping("/sendEmail")
     public boolean sendEmail(@RequestBody EmailNotification notification) {
         if (notification.getSubject() == null
-                && notification.getDestination() == null)
+                || notification.getDestination() == null || notification.getSource() == null)
             return false;
         Optional<NotificationTemplate> template = templateRepo.findById(notification.getSubject());
         if (!template.isPresent())
             return false;
-        if (!checkEmail(notification.getDestination()))
+        if (!checkEmail(notification.getDestination()) || !checkEmail(notification.getSource()))
             return false;
         if (!fillTemplate(template.get(), notification))
             return false;
@@ -57,12 +57,12 @@ public class NotificationQueueingController {
     @PostMapping("/sendSMS")
     public boolean sendSMS(@RequestBody SMSNotification notification) {
         if (notification.getSubject() == null
-                && notification.getDestination() == null)
+                || notification.getDestination() == null || notification.getSource() == null)
             return false;
         Optional<NotificationTemplate> template = templateRepo.findById(notification.getSubject());
         if (!template.isPresent())
             return false;
-        if (!checkPhoneNumber(notification.getDestination()))
+        if (!checkPhoneNumber(notification.getDestination()) || !checkPhoneNumber(notification.getSource()))
             return false;
         if (!fillTemplate(template.get(), notification))
             return false;
