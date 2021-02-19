@@ -1,6 +1,7 @@
 # Notifications-Module
 This is a notifications module to send Emails and SMSs that's built in Java as a project throughout the advanced software engineering course in college.
 It's not an entire software system but rather a component within a system, a module.
+
 The project is divided into three major steps:
 
 ## 1- Notification Template Management:
