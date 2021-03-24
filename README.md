@@ -22,5 +22,3 @@ In Sprint 2 we develop a web service (web API) to expose those CRUD operations f
 
 ## Sprint 3:
 In Sprint 3 we develop a console application that is responsible for actually sending the notifications that are inside the notification queues.
-
-The project was built in collaboration with: [Amr Bumadian](https://github.com/AmrBumadian) .
